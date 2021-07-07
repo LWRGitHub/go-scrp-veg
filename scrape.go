@@ -21,12 +21,12 @@ func main() {
 		colly.AllowedDomains("wellvegan.com"),
 	)
 
-	c.OnHTML("a.alignnone > img", func(e *colly.HTMLElement) {
-		title := e.Attr("src")
+	c.OnHTML("a.alignnone", func(e *colly.HTMLElement) {
+		title := e.Attr("title")
 
-		// img := e.ChildAttr("img", "src")
+		img := e.ChildAttr("img", "src")
 
-		fmt.Println(title)
+		fmt.Println(title, img)
 
 		// imgSrc := img.Attr("src")
 		// title := e.Attr("title")
