@@ -18,10 +18,10 @@ type VegFood struct {
 func main() {
 	c := colly.NewCollector(
 		// Restrict crawling to specific domains
-		colly.AllowedDomains("wellvegan.com"),
+		colly.AllowedDomains("recipeforvegans.com"),
 	)
 
-	c.OnHTML("a.alignnone", func(e *colly.HTMLElement) {
+	c.OnHTML("a.dj-thumb-link", func(e *colly.HTMLElement) {
 		title := e.Attr("title")
 
 		img := e.ChildAttr("img", "src")
@@ -59,6 +59,6 @@ func main() {
 
 	})
 
-	c.Visit("https://wellvegan.com")
+	c.Visit("https://recipeforvegans.com/")
 
 }
