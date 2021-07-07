@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/gocolly/colly"
 )
@@ -22,44 +21,44 @@ func main() {
 		colly.AllowedDomains("wellvegan.com"),
 	)
 
-	c.OnHTML("a.aligncenter ", func(e *colly.HTMLElement) {
-		VegFoodHref, err := strconv.Atoi(e.Attr("href"))
-		if err != nil {
-			fmt.Println("Couldn't get href")
-		}
+	c.OnHTML("a.alignnone > img", func(e *colly.HTMLElement) {
+		title := e.Attr("src")
 
-		img := e.ChildText("img").Attr("src")
+		// img := e.ChildAttr("img", "src")
+
+		fmt.Println(title)
+
 		// imgSrc := img.Attr("src")
-		title := e.Attr("title")
-		desc := string
-		ingr := string
-		instr := string
+		// title := e.Attr("title")
+		// desc := string
+		// ingr := string
+		// instr := string
 
-		c.Visit(VegFoodHref)
+		// c.Visit(VegFoodHref)
 
-		c.OnHTML(".tasty-recipes-description-body", func(e *colly.HTMLElement) {
-			desc = e.ChildText("p").Text + e.ChildText("a").Text
-		})
+		// c.OnHTML(".tasty-recipes-description-body", func(e *colly.HTMLElement) {
+		// 	desc = e.ChildText("p") + e.ChildText("a")
+		// })
 
-		c.OnHTML(".tasty-recipes-ingredients-body ul", func(e *colly.HTMLElement) {
-			ingr = e.ChildText("li").ChildText("span").Text + e.ChildText("li").Text
-		})
+		// c.OnHTML(".tasty-recipes-ingredients-body ul", func(e *colly.HTMLElement) {
+		// 	ingr = e.Attr("li").Attr("span").Text + e.ChildText("li")
+		// })
 
-		c.OnHTML(".tasty-recipes-instructions-body ol", func(e *colly.HTMLElement) {
-			instr = e.ChildText("li").Text
-		})
+		// c.OnHTML(".tasty-recipes-instructions-body ol", func(e *colly.HTMLElement) {
+		// 	instr = e.ChildText("li")
+		// })
 
-		vegFood := VegFood{
-			Title:        title,
-			Img:          img,
-			Href:         VegFoodHref,
-			Description:  desc,
-			Ingredients:  ingr,
-			Instructions: instr,
-		}
+		// vegFood := VegFood{
+		// 	Title:        title,
+		// 	Img:          img,
+		// 	Href:         VegFoodHref,
+		// 	Description:  desc,
+		// 	Ingredients:  ingr,
+		// 	Instructions: instr,
+		// }
 
 	})
 
-	c.Visit("https://wellvegan.com/recipes")
+	c.Visit("https://wellvegan.com")
 
 }
