@@ -23,7 +23,7 @@ func main() {
 		colly.AllowedDomains("recipeforvegans.com"),
 	)
 
-	var vegFoodsStr []byte
+	// var vegFoodsStr []byte
 
 	c.OnHTML("a.dj-thumb-link", func(e *colly.HTMLElement) {
 		title := e.Attr("title")
@@ -42,12 +42,16 @@ func main() {
 
 		vegFoodJson, _ := json.Marshal(vegFoods)
 
-		vegFoodsStr = append(vegFoodJson, vegFoodsStr)
+		// vegFoodsStr = append(vegFoodJson, vegFoodsStr)
+
+		if err := os.WriteFile("file.txt", []byte(vegFoodJson), 0666); err != nil {
+			log.Fatal(err)
+		}
 	})
 
-	if err := os.WriteFile("file.txt", []byte(vegFoodsStr), 0666); err != nil {
-		log.Fatal(err)
-	}
+	// if err := os.WriteFile("file.txt", []byte(vegFoodsStr), 0666); err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	c.Visit("https://recipeforvegans.com/")
 
