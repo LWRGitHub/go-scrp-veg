@@ -2,11 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
-	"log"
 	"os"
 
-	// "encoding/json"
+	// "fmt"
 
 	"github.com/gocolly/colly"
 )
@@ -25,14 +23,13 @@ func main() {
 
 	// var vegFoodsStr []byte
 
+	// vegFoodsSlice := []map[string][]byte{}
+
 	c.OnHTML("a.dj-thumb-link", func(e *colly.HTMLElement) {
+
 		title := e.Attr("title")
-
 		href := e.Attr("href")
-
 		img := e.ChildAttr("img", "src")
-
-		fmt.Println(title, img)
 
 		vegFoods := VegFoods{
 			Title: title,
@@ -40,16 +37,33 @@ func main() {
 			Href:  href,
 		}
 
+		// fmt.Println(vegFoods)
 		vegFoodJson, _ := json.Marshal(vegFoods)
+		// vegFoodsSlice = append(vegFoodsSlice, vegFoodJson)
 
 		// vegFoodsStr = append(vegFoodJson, vegFoodsStr)
 
-		if err := os.WriteFile("file.txt", []byte(vegFoodJson), 0666); err != nil {
-			log.Fatal(err)
+		// fmt.Println(vegFoodJson)
+
+		// if err := os.WriteFile("file.txt", []byte(vegFoodJson), 0666); err != nil {
+		// 	log.Fatal(err)
+		// }
+
+		f, err := os.OpenFile("file.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+		if err != nil {
+			panic(err)
+		}
+
+		defer f.Close()
+
+		vegFoodsStr := string(vegFoodJson)
+
+		if _, err = f.WriteString(vegFoodsStr); err != nil {
+			panic(err)
 		}
 	})
 
-	// if err := os.WriteFile("file.txt", []byte(vegFoodsStr), 0666); err != nil {
+	// if err := os.WriteFile("file.txt", []byte(vegFoodsSlice), 0666); err != nil {
 	// 	log.Fatal(err)
 	// }
 
