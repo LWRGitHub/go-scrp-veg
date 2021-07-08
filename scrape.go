@@ -1,18 +1,20 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
+	"os"
+
+	// "encoding/json"
 
 	"github.com/gocolly/colly"
 )
 
-type VegFood struct {
-	Title        string   `json:"title"`
-	Img          string   `json:"img"`
-	Href         string   `json:"href"`
-	Description  string   `json:"desc"`
-	Ingredients  []string `json:"ingr"`
-	Instructions string   `json:"instrc"`
+type VegFoods struct {
+	Title string `json:"title"`
+	Img   string `json:"img"`
+	Href  string `json:"href"`
 }
 
 func main() {
@@ -21,43 +23,31 @@ func main() {
 		colly.AllowedDomains("recipeforvegans.com"),
 	)
 
+	var vegFoodsStr []byte
+
 	c.OnHTML("a.dj-thumb-link", func(e *colly.HTMLElement) {
 		title := e.Attr("title")
+
+		href := e.Attr("href")
 
 		img := e.ChildAttr("img", "src")
 
 		fmt.Println(title, img)
 
-		// imgSrc := img.Attr("src")
-		// title := e.Attr("title")
-		// desc := string
-		// ingr := string
-		// instr := string
+		vegFoods := VegFoods{
+			Title: title,
+			Img:   img,
+			Href:  href,
+		}
 
-		// c.Visit(VegFoodHref)
+		vegFoodJson, _ := json.Marshal(vegFoods)
 
-		// c.OnHTML(".tasty-recipes-description-body", func(e *colly.HTMLElement) {
-		// 	desc = e.ChildText("p") + e.ChildText("a")
-		// })
-
-		// c.OnHTML(".tasty-recipes-ingredients-body ul", func(e *colly.HTMLElement) {
-		// 	ingr = e.Attr("li").Attr("span").Text + e.ChildText("li")
-		// })
-
-		// c.OnHTML(".tasty-recipes-instructions-body ol", func(e *colly.HTMLElement) {
-		// 	instr = e.ChildText("li")
-		// })
-
-		// vegFood := VegFood{
-		// 	Title:        title,
-		// 	Img:          img,
-		// 	Href:         VegFoodHref,
-		// 	Description:  desc,
-		// 	Ingredients:  ingr,
-		// 	Instructions: instr,
-		// }
-
+		vegFoodsStr = append(vegFoodJson, vegFoodsStr)
 	})
+
+	if err := os.WriteFile("file.txt", []byte(vegFoodsStr), 0666); err != nil {
+		log.Fatal(err)
+	}
 
 	c.Visit("https://recipeforvegans.com/")
 
