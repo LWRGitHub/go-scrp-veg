@@ -39,15 +39,6 @@ func main() {
 
 		// fmt.Println(vegFoods)
 		vegFoodJson, _ := json.Marshal(vegFoods)
-		// vegFoodsSlice = append(vegFoodsSlice, vegFoodJson)
-
-		// vegFoodsStr = append(vegFoodJson, vegFoodsStr)
-
-		// fmt.Println(vegFoodJson)
-
-		// if err := os.WriteFile("file.txt", []byte(vegFoodJson), 0666); err != nil {
-		// 	log.Fatal(err)
-		// }
 
 		f, err := os.OpenFile("file.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 		if err != nil {
@@ -62,10 +53,6 @@ func main() {
 			panic(err)
 		}
 	})
-
-	// if err := os.WriteFile("file.txt", []byte(vegFoodsSlice), 0666); err != nil {
-	// 	log.Fatal(err)
-	// }
 
 	c.Visit("https://recipeforvegans.com/")
 
